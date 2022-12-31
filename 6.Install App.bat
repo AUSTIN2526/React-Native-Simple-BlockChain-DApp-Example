@@ -1,0 +1,1 @@
+cd Dapp & npx react-native run-android

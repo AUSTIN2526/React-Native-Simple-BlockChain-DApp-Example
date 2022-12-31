@@ -1,0 +1,1 @@
+npx react-native init Dapp --version 0.65
