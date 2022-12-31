@@ -1,4 +1,5 @@
 # React-Native-Simple-BlockChain-App-Example
+this project can help you easy creation DApp 
 
 ## Prepare
 * React Native
