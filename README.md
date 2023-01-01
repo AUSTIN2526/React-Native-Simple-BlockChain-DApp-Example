@@ -1,5 +1,5 @@
 # React-Native-Simple-BlockChain-App-Example
-this project can help you easy creation DApp 
+This project can help you easy creation DApp 
 
 ## Prepare
 * React Native
@@ -102,7 +102,7 @@ contract Mycontract {
 }
 ```
 
-#### 2.find Web3 deploy code(SOLIDITY COMPILER > Compilation Details > WEB3DEPLOY)
+#### 2.Find Web3 deploy code(SOLIDITY COMPILER > Compilation Details > WEB3DEPLOY)
 ```
 var mycontractContract = new web3.eth.Contract([{"inputs":[],"name":"Helloworld","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"pure","type":"function"}]);
 var mycontract = mycontractContract.deploy({
@@ -126,7 +126,7 @@ bytecode = '0x608060405234801561001057600080fd5b5061017c806100206000396000f3fe60
 ```
 
 ## How to deploy hello world smart contract
-#### 1.creat a button
+#### 1.Creat a button
 ```
 <View>		
   <TouchableOpacity onPress = {() => this.deploy(YOU GETH ACCOUNT, YOU PASSWORD)}>
@@ -151,7 +151,7 @@ deploy  = (account, pwd) => {
 		})
 	}
 ```
-#### 3.run "6.Install App.bat"
+#### 3.Run "6.Install App.bat"
  * Now your DApp have a creat smart contract button
  
 #### 4.Press button and record transaction Hash in react native console
@@ -159,11 +159,12 @@ deploy  = (account, pwd) => {
 transactionHash:0x533013b2d6f59c8bc7541dc80681041bca210380c9d539b5134270b82e0632df
 ```
 #### 5.Wait the miner to write contract,the simple way is open your geth console and enter the following command
+* In geth console
 ```
 miner.start(1)
 ```
 #### 6. Call contract
-* function
+* Function
 ```
 useContract  = (account, pwd, hash) => {
 		web3.eth.personal.unlockAccount(account, pwd, 10).then( () => {
@@ -178,11 +179,11 @@ useContract  = (account, pwd, hash) => {
 	}
 ```
 
-* button
+* Button
 ```
 <View>		
   <TouchableOpacity onPress = {() => this.useContract(YOU GETH ACCOUNT, YOU PASSWORD,YOU Transaction Hash)}>
-    <Text>deploy smart contract</Text>
+    <Text>Hello world</Text>
   </TouchableOpacity>					
 </View>
 ```
