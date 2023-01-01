@@ -3,11 +3,11 @@ this project can help you easy creation DApp
 
 ## Prepare
 * React Native
-* ngrok
+* Ngrok
 * Node.js(16.1.0)
 * Geth(1.10.26)
 
-## How to use
+## How to creat DApp in your phone or simulator
 #### 1.Clone this project or download it
 ```
 git clone https://github.com/AUSTIN2526/React-Native-Simple-BlockChain-App-Example
@@ -87,56 +87,104 @@ git clone https://github.com/AUSTIN2526/React-Native-Simple-BlockChain-App-Examp
 #### 9.Open "App.js" and post you extranet IP
   * Install APP to your android phone or your simulator
 
-## Start designing your DAPP
-#### 1.creat a hello world smart contract
-* creat a button
+## How to get the bytecode and abi
+
+#### 1.Use Remix IDE and post this
 ```
-<View style = {styles.container}>		
-  <TouchableOpacity onPress = {() => this.deploy(YOU GETH ACCOUNT,YOU PASSWORD)}>
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.13;
+
+contract Mycontract {
+  
+    function Helloworld() public pure returns (string memory) {
+        return "Hello world";
+    }
+}
+```
+
+#### 2.find Web3 deploy code(SOLIDITY COMPILER > Compilation Details > WEB3DEPLOY)
+```
+var mycontractContract = new web3.eth.Contract([{"inputs":[],"name":"Helloworld","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"pure","type":"function"}]);
+var mycontract = mycontractContract.deploy({
+     data: '0x608060405234801561001057600080fd5b5061017c806100206000396000f3fe608060405234801561001057600080fd5b506004361061002b5760003560e01c8063a75f578614610030575b600080fd5b61003861004e565b6040516100459190610124565b60405180910390f35b60606040518060400160405280600b81526020017f48656c6c6f20776f726c64000000000000000000000000000000000000000000815250905090565b600081519050919050565b600082825260208201905092915050565b60005b838110156100c55780820151818401526020810190506100aa565b838111156100d4576000848401525b50505050565b6000601f19601f8301169050919050565b60006100f68261008b565b6101008185610096565b93506101108185602086016100a7565b610119816100da565b840191505092915050565b6000602082019050818103600083015261013e81846100eb565b90509291505056fea2646970667358221220a1f35f72cfd27122560bff56120eb6977c203ebc8c5bca74fc42b40a6ab433bd64736f6c634300080d0033', 
+     arguments: [
+     ]
+}).send({
+     from: web3.eth.accounts[0], 
+     gas: '4700000'
+   }, function (e, contract){
+    console.log(e, contract);
+    if (typeof contract.address !== 'undefined') {
+         console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
+    }
+ })
+```
+3.According to the above document,we can get abi and bytecode.
+```
+abi = [{"inputs":[],"name":"Helloworld","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"pure","type":"function"}]
+bytecode = '0x608060405234801561001057600080fd5b5061017c806100206000396000f3fe608060405234801561001057600080fd5b506004361061002b5760003560e01c8063a75f578614610030575b600080fd5b61003861004e565b6040516100459190610124565b60405180910390f35b60606040518060400160405280600b81526020017f48656c6c6f20776f726c64000000000000000000000000000000000000000000815250905090565b600081519050919050565b600082825260208201905092915050565b60005b838110156100c55780820151818401526020810190506100aa565b838111156100d4576000848401525b50505050565b6000601f19601f8301169050919050565b60006100f68261008b565b6101008185610096565b93506101108185602086016100a7565b610119816100da565b840191505092915050565b6000602082019050818103600083015261013e81846100eb565b90509291505056fea2646970667358221220a1f35f72cfd27122560bff56120eb6977c203ebc8c5bca74fc42b40a6ab433bd64736f6c634300080d0033'
+```
+
+## How to deploy hello world smart contract
+#### 1.creat a button
+```
+<View>		
+  <TouchableOpacity onPress = {() => this.deploy(YOU GETH ACCOUNT, YOU PASSWORD)}>
     <Text>deploy smart contract</Text>
   </TouchableOpacity>					
 </View>
 ```
-* define function
+#### 2.Define deploy function
 ```
 deploy  = (account, pwd) => {
 		web3.eth.personal.unlockAccount(account, pwd, 10).then(() => {				
-			const abi = [{"inputs":[],"name":"sayHelloWorld","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"pure","type":"function"}];
-			const code = "0x608060405234801561001057600080fd5b5061017c806100206000396000f3fe608060405234801561001057600080fd5b506004361061002b5760003560e01c806345773e4e14610030575b600080fd5b61003861004e565b6040516100459190610124565b60405180910390f35b60606040518060400160405280600b81526020017f48656c6c6f20576f726c64000000000000000000000000000000000000000000815250905090565b600081519050919050565b600082825260208201905092915050565b60005b838110156100c55780820151818401526020810190506100aa565b838111156100d4576000848401525b50505050565b6000601f19601f8301169050919050565b60006100f68261008b565b6101008185610096565b93506101108185602086016100a7565b610119816100da565b840191505092915050565b6000602082019050818103600083015261013e81846100eb565b90509291505056fea264697066735822122075b767592eff22d2b052e8d69016de2d91a69652afa7bb1cc072df6f7ea23f2764736f6c634300080d0033";
+			const abi = [{"inputs":[],"name":"Helloworld","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"pure","type":"function"}];
+			const code = "0x608060405234801561001057600080fd5b5061017c806100206000396000f3fe608060405234801561001057600080fd5b506004361061002b5760003560e01c8063a75f578614610030575b600080fd5b61003861004e565b6040516100459190610124565b60405180910390f35b60606040518060400160405280600b81526020017f48656c6c6f20776f726c64000000000000000000000000000000000000000000815250905090565b600081519050919050565b600082825260208201905092915050565b60005b838110156100c55780820151818401526020810190506100aa565b838111156100d4576000848401525b50505050565b6000601f19601f8301169050919050565b60006100f68261008b565b6101008185610096565b93506101108185602086016100a7565b610119816100da565b840191505092915050565b6000602082019050818103600083015261013e81846100eb565b90509291505056fea2646970667358221220a1f35f72cfd27122560bff56120eb6977c203ebc8c5bca74fc42b40a6ab433bd64736f6c634300080d0033";
 			const options = {from:account, gas:'470000'};
 
 			var contract = new web3.eth.Contract(abi);
 			var Mycontract = contract.deploy({data:code}).send(options).on('transactionHash', function(transactionHash){
 				console.log('transactionHash:'+transactionHash);
 			});
-				
-				
 		}).catch(() => {
 			Alert.alert('server error','error');
 		})
 	}
 ```
-#### 2.Test the code,you will get the transaction Hash in you react native console,and record it
+#### 3.run "6.Install App.bat"
+ * Now your DApp have a creat smart contract button
+ 
+#### 4.Press button and record transaction Hash in react native console
 ```
 transactionHash:0x533013b2d6f59c8bc7541dc80681041bca210380c9d539b5134270b82e0632df
 ```
-#### 3.Wait the miner to write contract,the simple way is open your geth console and enter the following command
+#### 5.Wait the miner to write contract,the simple way is open your geth console and enter the following command
 ```
 miner.start(1)
 ```
-#### 4. Call contract
+#### 6. Call contract
+* function
 ```
 useContract  = (account, pwd, hash) => {
 		web3.eth.personal.unlockAccount(account, pwd, 10).then( () => {
 			web3.eth.getTransactionReceipt(hash).then(r => {
 				const address = r.contractAddress
 				console.log('contract address:',address)
-				const abi = [{"inputs":[],"name":"sayHelloWorld","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"pure","type":"function"}];
+				const abi = [{"inputs":[],"name":"Helloworld","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"pure","type":"function"}];
 				var contract = new web3.eth.Contract(abi,address);
-				contract.methods.sayHelloWorld().call().then(console.log);
+				contract.methods.Helloworld().call().then(console.log);
 			});
 		});
 	}
+```
+
+* button
+```
+<View>		
+  <TouchableOpacity onPress = {() => this.useContract(YOU GETH ACCOUNT, YOU PASSWORD,YOU Transaction Hash)}>
+    <Text>deploy smart contract</Text>
+  </TouchableOpacity>					
+</View>
 ```
 Now you can see the "hello word" in your react native console
 
@@ -144,7 +192,3 @@ Now you can see the "hello word" in your react native console
 * Use Remix IDE write contract
 * Generate "abi" and "bytecode"
 * Change deploy function "abi" and "bytecode"
-
-
-
-    
