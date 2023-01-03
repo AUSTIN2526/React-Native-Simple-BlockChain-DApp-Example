@@ -193,3 +193,129 @@ Now you can see the "hello word" in your react native console
 * Use Remix IDE write contract
 * Generate "abi" and "bytecode"
 * Change deploy function "abi" and "bytecode"
+
+## If you want creat traceability
+* In Remix IDE
+```
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.13;
+contract Traceability {
+    //product info
+    struct Product{
+        mapping(string => string) time;
+        mapping(string => string) operator;
+    }
+   
+
+    mapping(string => Product) products;
+
+
+    //creat data by station ID and product ID
+    function addData(string memory _stationID, string memory _productID, string memory _operator, string memory _time) public{
+        Product storage product = products[_stationID];
+        product.time[_productID] = _time;
+        product.operator[_productID] = _operator;
+        
+    } 
+    
+    //Read data
+    function getInfo(string memory  _productID, string  memory _stationID) public view returns (string memory,string memory) {
+        return (products[_stationID].time[_productID],
+                products[_stationID].operator[_productID]);
+    }
+   
+
+    
+    
+}
+```
+
+#### In React Native
+* Creat data(make sure you account and pwd is correct,because this code is inherited from the login page)
+```
+addData = (account, pwd) => {
+		//unlockAccount 10 sconds
+		web3.eth.personal.unlockAccount(account, pwd, 10).then(() => {
+
+			//decode smart contract hash
+			web3.eth.getTransactionReceipt(SmartContractHash).then(r => {
+				
+				//get smart contract address
+				const address = r.contractAddress
+				
+				//Defind contract 
+				const abi = [{"inputs":[{"internalType":"string","name":"_stationID","type":"string"},{"internalType":"string","name":"_productID","type":"string"},{"internalType":"string","name":"_operator","type":"string"},{"internalType":"string","name":"_time","type":"string"}],"name":"addData","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_productID","type":"string"},{"internalType":"string","name":"_stationID","type":"string"}],"name":"getInfo","outputs":[{"internalType":"string","name":"","type":"string"},{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"}];
+				const options = {from:account, gas:'470000'};
+				var contract = new web3.eth.Contract(abi, address);
+
+				//Write data to smart contract
+				//stationID,productID,operator,time
+				const productId = "productTest01"
+				const stationId = "stationTest01"
+				
+				contract.methods.addData(stationId, productId, account, '2023/01/01 12:00')
+				.send(options)
+				.on('transactionHash', function(transactionHash){
+					console.log('Product Id:' + productId + ' Station Id:' + stationId)
+					console.log('transactionHash:' + transactionHash);
+
+					//record RecordProuct
+					fetch(PyIP+'/RecordProuct/'+productId+'/'+ stationId);
+				});
+
+			//Decode Error
+			}).catch(() => {
+				Alert.alert('Decode Error','Decode Contract Error');
+			});
+
+		//unlockAccount Error
+		}).catch(() => {
+			Alert.alert('Server Error','Server Error');
+		});
+		
+	}
+```
+* Read data
+```
+addData = (account, pwd) => {
+		//unlockAccount 10 sconds
+		web3.eth.personal.unlockAccount(account, pwd, 10).then(() => {
+
+			//decode smart contract hash
+			web3.eth.getTransactionReceipt(SmartContractHash).then(r => {
+				
+				//get smart contract address
+				const address = r.contractAddress
+				
+				//Defind contract 
+				const abi = [{"inputs":[{"internalType":"string","name":"_stationID","type":"string"},{"internalType":"string","name":"_productID","type":"string"},{"internalType":"string","name":"_operator","type":"string"},{"internalType":"string","name":"_time","type":"string"}],"name":"addData","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_productID","type":"string"},{"internalType":"string","name":"_stationID","type":"string"}],"name":"getInfo","outputs":[{"internalType":"string","name":"","type":"string"},{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"}];
+				const options = {from:account, gas:'470000'};
+				var contract = new web3.eth.Contract(abi, address);
+
+				//Write data to smart contract
+				//stationID,productID,operator,time
+				const productId = "productTest01"
+				const stationId = "stationTest01"
+				
+				contract.methods.addData(stationId, productId, account, '2023/01/01 12:00')
+				.send(options)
+				.on('transactionHash', function(transactionHash){
+					console.log('Product Id:' + productId + ' Station Id:' + stationId)
+					console.log('transactionHash:' + transactionHash);
+
+					//record RecordProuct
+					fetch(PyIP+'/RecordProuct/'+productId+'/'+ stationId);
+				});
+
+			//Decode Error
+			}).catch(() => {
+				Alert.alert('Decode Error','Decode Contract Error');
+			});
+
+		//unlockAccount Error
+		}).catch(() => {
+			Alert.alert('Server Error','Server Error');
+		});
+		
+	}
+```
