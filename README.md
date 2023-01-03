@@ -2,10 +2,14 @@
 This project can help you easy creation DApp 
 
 ## Prepare
-* React Native
-* Ngrok
-* Node.js(16.1.0)
-* Geth(1.10.26)
+* Node.js(16.1.0)   
+link:<https://nodejs.org/download/release/v16.1.0/>
+* React Native   
+link:<https://reactnative.dev/docs/environment-setup>   
+* Ngrok   
+link:<https://ngrok.com/>
+* Geth(1.10.26)   
+link:<https://gethstore.blob.core.windows.net/builds/geth-windows-amd64-1.10.26-e5eb32ac.exe>
 
 ## How to creat DApp in your phone or simulator
 #### 1.Clone this project or download it
